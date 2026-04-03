@@ -3,7 +3,7 @@ import urllib.parse
 
 # 配置项
 url = "https://zip.cm.edu.kg/all.txt"
-MAX_LINES = 300
+MAX_LINES = 500
 
 # 地区及其对应关键词字典 (key 就是最终生成的文件名)
 regions_keywords = {
