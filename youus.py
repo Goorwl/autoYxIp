@@ -52,6 +52,7 @@ def process_region(region):
     """处理单个地区，并返回该地区所有存活节点的列表"""
     input_file = f"{region}.txt"
     output_file = f"{region}Res.txt"
+    yx_output_file = f"{region}ResYx.txt" # 新增的文件名
     
     print(f"\n========== 开始处理 [{region.upper()}] 地区 ==========")
     
@@ -100,11 +101,19 @@ def process_region(region):
         if len(top_nodes) > 3:
             print(f"   ... (共保存 {len(top_nodes)} 个)")
             
+        # --- 保存原始格式文件 (xxRes.txt) ---
         top_links = [link for lat, link in top_nodes]
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write("\n".join(top_links))
-            
         print(f"✅ 成功生成 '{output_file}'")
+
+        # --- 新增：保存逗号分隔的纯净格式文件 (xxResYx.txt) ---
+        clean_links = [link.split('#')[0].strip() for link in top_links]
+        yx_content = ",".join(clean_links)
+        with open(yx_output_file, 'w', encoding='utf-8') as f:
+            f.write(yx_content)
+        print(f"✅ 成功生成 '{yx_output_file}'")
+        
         return top_links
 
     except Exception as e:
@@ -124,13 +133,13 @@ def main():
             # 1. 截取该地区的前 10 个
             top_10 = top_links[:SUMMARY_TOP_N]
             
-            # 2. 去掉每个节点后面的 # 备注（例如把 "1.1.1.1:443#US" 变成 "1.1.1.1:443"）
+            # 2. 去掉每个节点后面的 # 备注
             clean_top_10 = [link.split('#')[0].strip() for link in top_10]
             
             # 3. 用逗号将纯净的 IP:端口 连接起来
             merged_links = ",".join(clean_top_10)
             
-            # 4. 在最前面加上 "US: " 这种地区前缀
+            # 4. 在最前面加上地区前缀
             formatted_line = f"{region.upper()}: {merged_links}"
             
             # 5. 添加到汇总列表
