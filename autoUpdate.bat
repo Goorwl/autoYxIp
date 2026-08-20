@@ -21,6 +21,7 @@ echo ====================================
 echo 2. 正在执行 Python 脚本，请耐心等待...
 echo ====================================
 python .\youus.py
+call .\202608yxip.bat
 if %errorlevel% neq 0 (
     echo [错误] Python 脚本执行失败，脚本已停止！
     pause
